@@ -1,31 +1,18 @@
-# 목표
+# React TodoList w/ RSC
 
-- 정희의 목표
-  - react 문법 익숙해지기
-  - 기술스택에 대한 이유 갖기
-- 정진의 목표
-  - tailwindcss 졸업
-  - react recap하기
+## 목표
 
-# 기술스택
+- Vite API와 React18 기능을 이용해 React server component(RSC) 환경을 직접 구축한다.
+- RSC를 위한 HMR(Hot Module Replacement) 플러그인을 제작한다.
 
-- React
+## 기술스택
+
+- React (w/ RSC)
 - Vite
 - Typescript
 - CSS module
 
-# 그라운드 룰
-
-### 페어프로그래밍 규칙
-
-- 25분씩가며 드라이버와 네비게이터를 번갈아 진행한다. 25분 후에는 5분 휴식한다.
-
-### 브랜치 전략
-
-- [우린 Git-flow를 사용하고 있어요](https://techblog.woowahan.com/2553/)
-- ojj1123: 프러덕션으로 배포할 브랜치
-- dev: 다음 출시할 개발 브랜치
-- feat/issue-{이슈 번호}: 기능 개발 브랜치
+## 그라운드 룰
 
 ### 커밋 컨벤션
 
@@ -34,9 +21,9 @@
 - docs: 문서 수정
 - fix: 버그 수정
 - chore: 사소한 작업
-- style: 퍼블리싱
+- test: 테스트 코드
 
-# 기능 요구 사항
+## 기능 요구 사항
 
 기능 우선순위: 상 / 중 / 하
 
