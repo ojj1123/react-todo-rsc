@@ -1,6 +1,12 @@
 import fs from "fs"
 import express from "express"
 import { createServer as createViteServer } from "vite"
+import { renderToReadableStream } from "react-dom/server"
+import React from "react"
+import { build as buildVite } from "vite"
+
+const isProd = process.env.NODE_ENV === "production"
+const port = 5173
 
 const app = express()
 
@@ -11,7 +17,7 @@ const vite = await createViteServer({
 
 app.use(vite.middlewares)
 
-app.use("*", async (req, res, next) => {
+app.use("/", async (req, res, next) => {
   const url = req.originalUrl
 
   try {
@@ -34,4 +40,45 @@ app.use("*", async (req, res, next) => {
   }
 })
 
-app.listen(5173)
+app.use("/rsc", (req, res) => {
+  const stream = renderToReadableStream()
+})
+
+const chilentEntryPoints = new Set()
+async function build() {
+  // 1. build server components
+  // NOTE: externalize client component bundles from server bundle
+  await buildVite({
+    logLevel: "error",
+    build: {
+      ssr: true,
+      outDir: "build",
+      rollupOptions: {},
+    },
+    plugins: [
+      {
+        name: "vite-plugin-rsc",
+        load(id) {},
+
+        transform(code, id) {
+          const packageRegex = /node_modules/g
+          if (packageRegex.test(id)) return null
+          const reactComponentRegex = /\.(jsx|tsx)$/
+          if (reactComponentRegex.test(id)) {
+            if (code.startsWith("'use client'")) {
+              chilentEntryPoints.add(id)
+              return {}
+            }
+          }
+        },
+      },
+    ],
+  })
+
+  // 2. build client components
+}
+
+app.listen(port, async () => {
+  await build()
+  console.log(`start server on port ${port}`)
+})
